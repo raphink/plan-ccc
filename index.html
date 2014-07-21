@@ -1,1 +1,104 @@
-<html></html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Venir depuis la gare</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-language" content="en" />
+<meta name="generator" content="Easymap" />
+<link rel="stylesheet" type="text/css" href="map.css" />
+
+<script type="text/javascript" src="openlayers/OpenLayers.js"></script>
+<script type="text/javascript" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+<script type="text/javascript" src="util.js"></script>
+ 
+<script type="text/javascript">
+//<![CDATA[
+
+var map;
+
+var showPopupOnHover = false;
+text = new Array("Show map information","Hide map information");
+
+function drawmap() {
+    OpenLayers.Lang.setCode('de');
+    
+    map = new OpenLayers.Map('map', {
+        projection: new OpenLayers.Projection("EPSG:900913"),
+        displayProjection: new OpenLayers.Projection("EPSG:4326"),
+        controls: [
+		new OpenLayers.Control.MouseDefaults(),
+		new OpenLayers.Control.Attribution()],
+        maxExtent:
+            new OpenLayers.Bounds(-20037508.34,-20037508.34,
+                                    20037508.34, 20037508.34),
+        numZoomLevels: 18,
+        maxResolution: 156543,
+        units: 'meters'
+    });
+
+
+
+// Add more controls..
+map.addControl(new OpenLayers.Control.LayerSwitcher());
+map.addControl(new OpenLayers.Control.PanZoomBar());
+
+
+
+// Position and zoom of the map
+lon = 9;
+lat = 49;
+zoom = 6; 
+
+checkForPermalink();
+
+
+
+
+// Add layers
+
+layer_markers = new OpenLayers.Layer.Markers("Marker", { projection: new OpenLayers.Projection("EPSG:4326"),visibility: true, displayInLayerSwitcher: false });
+layer_vectors = new OpenLayers.Layer.Vector("Drawings", { displayInLayerSwitcher: false } );map.addLayer(layer_vectors);map.addLayer(layer_markers)
+layers = new Array();
+layer_layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+map.addLayer(layer_layerMapnik)
+layers.push(new Array(layer_layerMapnik,'layer_layerMapnik'));
+setLayer(0);
+
+
+// Jump to the right position and zoom..
+jumpTo(lon,lat,zoom);
+
+// Add used maker icons..
+icons = new Array();
+icons[0] = new Array('http://openlayers.org/api/img/marker.png','21','25','0.5','1');
+icons[10] = new Array('http://osmtools.de/easymap/images/haus_red.png','20','24','0.5','0.5');
+
+
+// Add markers
+addMarker(layer_markers,5.9195634127886,45.571327163545,"<b>Gare SNCF</b><p />Gare SNCF",false,0);
+addMarker(layer_markers,5.9206751884249,45.566940913773,"<b>2 rue Favre</b><p />Calvary Chapel<br />c/o famille PINSON<br />2 rue Favre<br />3e étage<br />Sonnette #6",false,10);
+
+
+geometries = new Array();geometries.push(drawLine([[5.9195701183104,45.571304632312],[5.9195647538926,45.571071809076],[5.9197042287614,45.570613670212],[5.9194896520403,45.570418396773],[5.9198651613023,45.569810040555],[5.9195218385483,45.569073995823],[5.9192643464829,45.568781077381],[5.9190926851059,45.567797160662],[5.9205732644819,45.566858292763]],{strokeColor:"#0000FF",strokeWidth: 3,fillColor: "#0000FF",fillOpacity: 0.4}));
+
+
+
+// Nochmal was..
+jumpTo(lon, lat, zoom);
+
+checkUtilVersion(4);
+}
+
+//]]>
+    </script>
+</head>
+<body onload="drawmap();">
+	
+	<div id="descriptionToggle" onclick="toggleInfo()">Show map information</div>
+	<div id="description" class="hide">Comment venir depuis la gare SNCF de Chambéry - Challes les Eaux</div>
+	<div id="map"></div>
+	<div class="hide"><p>Wenn Sie diesen Text sehen, dann haben Sie die HTML-Datei ohne die zusätzlich benötigten Dateien geöffnet. Wenn Sie versucht haben die Karte herunterzuladen, wurde das Downloadfenster möglicherweise aus irgendeinem Grund nicht geöffnet. Speichern Sie in diesem Fall einfach diese Seite ab.</p><p>If you see this text, you opened the map HTML-File without the necessary files. If you tried to download the map, the download dialog may not have opened for some reason. In this case just save this page.</p></div>
+</body>
+</html>
